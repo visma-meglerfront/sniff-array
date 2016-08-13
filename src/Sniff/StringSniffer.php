@@ -10,12 +10,12 @@
 			return mb_strpos(strrev($haystack), strrev($needle)) === 0;
 		}
 
-		public static function humanize(string $string): string {
+		public static function capitalize(string $string, bool $strict = false): string {
 			$string = trim($string);
 
 			$first = mb_substr($string, 0, 1);
 			$rest = mb_substr($string, 1);
 
-			return mb_strtoupper($first) . mb_strtolower($rest);
+			return mb_strtoupper($first) . ($strict ? mb_strtolower($rest) : $rest);
 		}
 	}

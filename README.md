@@ -191,7 +191,7 @@ as well as
 ```php
 [
     'key'       =>  'value',
-    'any'      =>  [
+    'any'       =>  [
         'foo'   =>  true,
         'bar'   =>  [
             'one'   =>  123,

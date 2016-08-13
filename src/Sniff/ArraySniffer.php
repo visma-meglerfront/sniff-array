@@ -5,20 +5,42 @@
 
 	/**
 	 * Class ArraySniffer
+	 * Can check an array for conformity to a certain specification
+	 *
+	 * @author suushie_maniac
+	 * @version 1.1
 	 */
 	class ArraySniffer {
 		private $spec;
 		private $throw;
 
+		/**
+		 * ArraySniffer constructor.
+		 *
+		 * @param array $spec The specification that this sniffer sniffs/checks for
+		 * @param bool $throw If an exception should be raised on failure. A simple false is returned elsewise. Defaults to false
+		 */
 		public function __construct(array $spec, bool $throw = false) {
 			$this->spec = $spec;
 			$this->throw = $throw;
 		}
 
+		/**
+		 * Set the exception throwing behaviour
+		 *
+		 * @param bool $throw Whether an exception should be raised on failure or not. Defaults to true
+		 */
 		public function setThrow(bool $throw = true) {
 			$this->throw = $throw;
 		}
 
+		/**
+		 * Sniff for the conformity of $array to this ArraySniffer instance's specification
+		 *
+		 * @param array $array The array to check conformity for
+		 * @throws InvalidArrayFormatException If the $array doesn't match and $throw of this instance is true
+		 * @return bool If the $array matches or not
+		 */
 		public function sniff(array $array): bool {
 			foreach ($this->spec as $key => $type) {
 				$key = preg_replace('/(.*)\*$/', '$1{,}', $key);
@@ -111,6 +133,15 @@
 			}
 		}
 
+		/**
+		 * Check if an array conforms to a specification
+		 *
+		 * @param array $spec The specification to check for
+		 * @param array $array The array to check
+		 * @param bool $throw Whether an exception should be raised on failure
+		 * @throws InvalidArrayFormatException If the $array doesn't match and $throw is set to true
+		 * @return bool If the $array matches or not
+		 */
 		public static function arrayConformsTo(array $spec, array $array, bool $throw = false): bool {
 			return (new ArraySniffer($spec, $throw))->sniff($array);
 		}

@@ -24,7 +24,7 @@
 				$baseKey = preg_replace('/(.*)[\+\*]$/', '$1', $key); //Remove eventual * or +
 				$element = $array[$baseKey] ?? null;
 
-				if ($baseKey != $key) { //RegExp key used //TODO suushie drop key completely on star (*) usage
+				if ($baseKey != $key) { //RegExp key used
 					$subSpec = [$baseKey => $type];
 					$subSniffer = $this->subSniffer($subSpec);
 

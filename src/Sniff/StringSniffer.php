@@ -2,7 +2,7 @@
 	namespace Adepto\SniffArray\Sniff;
 
 	class StringSniffer extends SplSniffer {
-		public function sniff($val, bool $isStrict = false): bool {
+		public function sniffVal($val, bool $isStrict = false): bool {
 			return is_string($val) && (!$isStrict || mb_strlen($val) > 0);
 		}
 

@@ -1,7 +1,9 @@
 <?php
 	namespace Adepto\SniffArray\Sniff;
 
-	use Adepto\SniffArray\Exception\ClassNotFoundException;
+	use Adepto\SniffArray\Exception\{
+		ClassNotFoundException, InvalidValueException
+	};
 
 	abstract class SplSniffer {
 		const BASE_NAMESPACE = 'Adepto\\SniffArray\\Sniff';
@@ -52,7 +54,16 @@
 			$this->throw = $throw;
 		}
 
-		public abstract function sniff($val, bool $isStrict = false): bool;
+		public function sniff($val, bool $isStrict = false): bool {
+			$accept = $this->sniffVal($val, $isStrict);
+
+			if ($this->throw && !$accept)
+				throw new InvalidValueException(var_export($val, true) . ' does not confirm to type specifications');
+
+			return $accept;
+		}
+
+		public abstract function sniffVal($val, bool $isStrict = false): bool;
 
 		public static function validateTypes(array $types): bool {
 			$valid = true;

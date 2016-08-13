@@ -26,17 +26,28 @@
 			$this->assertFalse(StringSniffer::strEndsWith('string+', '*'));
 		}
 
-		public function testStaticHumanize() {
-			$this->assertEquals('Humanize', StringSniffer::humanize('humanize'));
-			$this->assertEquals('Humanize', StringSniffer::humanize('Humanize'));
-			$this->assertEquals('Humanize', StringSniffer::humanize('HUmanize'));
-			$this->assertEquals('Humanize', StringSniffer::humanize('HUmAniZe'));
-			$this->assertEquals('Humanize', StringSniffer::humanize('HUMANIZE'));
-			$this->assertEquals('Humanize', StringSniffer::humanize('hUMANIZE'));
+		public function testStaticCapitalize() {
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('capitalize'));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('Capitalize'));
+			$this->assertEquals('CApitalize', StringSniffer::capitalize('CApitalize'));
+			$this->assertEquals('CApItALizE', StringSniffer::capitalize('cApItALizE'));
+			$this->assertEquals('CAPITALIZE', StringSniffer::capitalize('CAPITALIZE'));
+			$this->assertEquals('CAPITALIZE', StringSniffer::capitalize('cAPITALIZE'));
 
-			$this->assertNotEquals('humanize', StringSniffer::humanize('humanize'));
-			$this->assertNotEquals('HUMANIZE', StringSniffer::humanize('humanize'));
-			$this->assertNotEquals('Humanize', StringSniffer::humanize('nope'));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('capitalize', true));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('Capitalize', true));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('CApitalize', true));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('cApItALizE', true));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('CAPITALIZE', true));
+			$this->assertEquals('Capitalize', StringSniffer::capitalize('cAPITALIZE', true));
+
+			$this->assertNotEquals('capitalize', StringSniffer::capitalize('capitalize'));
+			$this->assertNotEquals('CAPITALIZE', StringSniffer::capitalize('capitalize'));
+			$this->assertNotEquals('Capitalize', StringSniffer::capitalize('nope'));
+
+			$this->assertNotEquals('capitalize', StringSniffer::capitalize('capitalize', true));
+			$this->assertNotEquals('CAPITALIZE', StringSniffer::capitalize('capitalize', true));
+			$this->assertNotEquals('Capitalize', StringSniffer::capitalize('nope', true));
 		}
 
 		public function testSniffPositive() {

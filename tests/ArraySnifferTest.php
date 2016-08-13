@@ -31,8 +31,11 @@
 		 * @expectedException Adepto\SniffArray\Exception\InvalidArrayFormatException
 		 */
 		public function testThrowOnFailure() {
-			$conforms = ArraySniffer::arrayConformsTo([], [], true);
-			$this->assertTrue($conforms);
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'someKey'	=>	'int'
+			], [
+				'someKey'	=>	42
+			], true));
 
 			ArraySniffer::arrayConformsTo([
 				'someKey'	=>	'int'
@@ -55,6 +58,69 @@
 					'second'	=>	false
 				]
 			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key'		=>	'string',
+				'nested'	=>	[
+					'first'			=>	'int',
+					'second'		=>	'bool',
+					'furtherNested'	=>	[
+						'hello'	=>	'string'
+					]
+				]
+			], [
+				'key'		=>	'value',
+				'nested'	=>	[
+					'first'			=>	-456,
+					'second'		=>	false,
+					'furtherNested'	=>	[
+						'hello'	=>	'world'
+					]
+				]
+			]));
+
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'one'	=>	[
+					'two'	=>	[
+						'three'	=>	[
+							'nestedValue'	=>	'bool'
+						]
+					]
+				]
+			], [
+				'one'	=>	true
+			]));
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'one'	=>	[
+					'two'	=>	[
+						'three'	=>	[
+							'nestedValue'	=>	'bool'
+						]
+					]
+				]
+			], [
+				'one'	=>	[
+					'two'	=>	true
+				]
+			]));
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'one'	=>	[
+					'two'	=>	[
+						'three'	=>	[
+							'nestedValue'	=>	'bool'
+						]
+					]
+				]
+			], [
+				'one'	=>	[
+					'two'	=>	[
+						'three'	=>	[
+							'nestedValue'	=>	[
+								'some'	=>	'value'
+							]
+						]
+					]
+				]
+			]));
 		}
 
 		public function testRegExpSpecConformity() {
@@ -75,6 +141,16 @@
 						'second'	=>	false
 					]
 				]
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key*'		=>	'int',
+				'nested*'	=>	[
+					'first'		=>	'string',
+					'second'	=>	'bool'
+				]
+			], [
+				'key'		=>	[123, 456, 789],
+				'nested'	=>	[]
 			]));
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
@@ -169,6 +245,34 @@
 				'key'		=>	true,
 				'otherKey'	=>	0
 			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null'
+			], [
+				'reallyAnything'	=>	'someString'
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null'
+			], [
+				'reallyAnything'	=>	true
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null'
+			], [
+				'reallyAnything'	=>	-INF
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null'
+			], [
+				'reallyAnything'	=>	123456789
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null'
+			], [
+				'reallyAnything'	=>	null
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'reallyAnything'	=>	'string|bool|number|int|null',
+			], []));
 
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key'		=>	'string|bool',

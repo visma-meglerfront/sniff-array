@@ -40,7 +40,9 @@
 		public function testSniffStrict() {
 			$this->assertTrue($this->sniffer->sniff(123, true));
 			$this->assertTrue($this->sniffer->sniff(-456, true));
+			$this->assertTrue($this->sniffer->sniff(123456789, true));
 			$this->assertTrue($this->sniffer->sniff(123.456, true));
+			$this->assertTrue($this->sniffer->sniff(INF, true));
 
 			$this->assertFalse($this->sniffer->sniff(0, true));
 			$this->assertFalse($this->sniffer->sniff(NAN, true));

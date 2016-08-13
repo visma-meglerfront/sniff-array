@@ -5,7 +5,7 @@
 		public function testStaticValidTypes() {
 			$this->assertTrue(SplSniffer::isValidType('string'));
 			$this->assertTrue(SplSniffer::isValidType('bool'));
-			$this->assertTrue(SplSniffer::isValidType('arrayFlat'));
+			$this->assertTrue(SplSniffer::isValidType('mixedArray'));
 			$this->assertTrue(SplSniffer::isValidType('number'));
 			$this->assertTrue(SplSniffer::isValidType('mixed'));
 			$this->assertTrue(SplSniffer::isValidType('int'));

@@ -14,7 +14,7 @@
 		const TYPE_NUMBER = 'number';
 		const TYPE_NULL = 'null';
 		const TYPE_MIXED = 'mixed';
-		const TYPE_ARRAY_FLAT = 'arrayFlat';
+		const TYPE_MIXED_ARRAY = 'mixedArray';
 
 		const SUPPORTED_TYPES = [
 			self::TYPE_BOOL,
@@ -23,7 +23,7 @@
 			self::TYPE_NUMBER,
 			self::TYPE_NULL,
 			self::TYPE_MIXED,
-			self::TYPE_ARRAY_FLAT
+			self::TYPE_MIXED_ARRAY
 		];
 
 		const TYPE_REMAPPINGS = [
@@ -32,7 +32,7 @@
 			'numeric'	=>	self::TYPE_NUMBER,
 			'integer'	=>	self::TYPE_INT,
 			'any'		=>	self::TYPE_MIXED,
-			'array'		=>	self::TYPE_ARRAY_FLAT
+			'array'		=>	self::TYPE_MIXED_ARRAY
 		];
 
 		public static function forType(string $type, bool $throw = false): SplSniffer {

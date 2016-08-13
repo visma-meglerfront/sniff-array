@@ -67,7 +67,7 @@
 						if (!$this->handle(!SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid'))
 							return false;
 
-						$conforms |= SplSniffer::forType($baseType, $this->throw)->sniff($element, $isStrict);
+						$conforms |= SplSniffer::forType($baseType)->sniff($element, $isStrict);
 					}
 
 					if (!$this->handle(!$conforms, $key . ' with value ' . var_export($element, true) . ' does not match type definition ' . $type))

@@ -1,22 +1,22 @@
 <?php
 	use Adepto\SniffArray\Sniff\{
-		ArrayFlatSniffer, SplSniffer
+		MixedArraySniffer, SplSniffer
 	};
 
-	class ArrayFlatSnifferTest extends PHPUnit_Framework_TestCase {
+	class MixedArraySnifferTest extends PHPUnit_Framework_TestCase {
 		/** @var SplSniffer */
 		protected $sniffer;
 
 		protected function setUp() {
-			$this->sniffer = new ArrayFlatSniffer();
+			$this->sniffer = new MixedArraySniffer();
 		}
 
 		public function testStaticCreation() {
 			$sniffer = SplSniffer::forType('array');
-			$this->assertEquals('Adepto\\SniffArray\\Sniff\\ArrayFlatSniffer', get_class($sniffer));
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
 
-			$sniffer = SplSniffer::forType('arrayFlat');
-			$this->assertEquals('Adepto\\SniffArray\\Sniff\\ArrayFlatSniffer', get_class($sniffer));
+			$sniffer = SplSniffer::forType('mixedArray');
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
 		}
 
 		public function testSniffPositive() {

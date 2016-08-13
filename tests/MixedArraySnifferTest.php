@@ -8,7 +8,7 @@
 		protected $sniffer;
 
 		protected function setUp() {
-			$this->sniffer = new MixedArraySniffer();
+			$this->sniffer = SplSniffer::forType('array');
 		}
 
 		public function testStaticCreation() {

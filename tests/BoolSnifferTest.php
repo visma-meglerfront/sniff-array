@@ -8,7 +8,7 @@
 		protected $sniffer;
 
 		protected function setUp() {
-			$this->sniffer = new BoolSniffer();
+			$this->sniffer = SplSniffer::forType('bool');
 		}
 
 		public function testStaticCreation() {

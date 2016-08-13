@@ -8,7 +8,7 @@
 		protected $sniffer;
 
 		protected function setUp() {
-			$this->sniffer = new NullSniffer();
+			$this->sniffer = SplSniffer::forType('null');
 		}
 
 		public function testStaticCreation() {

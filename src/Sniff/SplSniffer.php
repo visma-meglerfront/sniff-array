@@ -11,26 +11,32 @@
 		const TYPE_INT = 'int';
 		const TYPE_NUMBER = 'number';
 		const TYPE_NULL = 'null';
+		const TYPE_MIXED = 'mixed';
+		const TYPE_ARRAY_FLAT = 'arrayFlat';
 
 		const SUPPORTED_TYPES = [
 			self::TYPE_BOOL,
 			self::TYPE_STRING,
 			self::TYPE_INT,
 			self::TYPE_NUMBER,
-			self::TYPE_NULL
+			self::TYPE_NULL,
+			self::TYPE_MIXED,
+			self::TYPE_ARRAY_FLAT
 		];
 
 		const TYPE_REMAPPINGS = [
 			'boolean'	=>	self::TYPE_BOOL,
 			'empty'		=>	self::TYPE_NULL,
 			'numeric'	=>	self::TYPE_NUMBER,
-			'integer'	=>	self::TYPE_INT
+			'integer'	=>	self::TYPE_INT,
+			'any'		=>	self::TYPE_MIXED,
+			'array'		=>	self::TYPE_ARRAY_FLAT
 		];
 
 		public static function forType(string $type, bool $throw = false): SplSniffer {
 			$type = static::TYPE_REMAPPINGS[$type] ?? $type;
 
-			$classType = StringSniffer::humanize($type);
+			$classType = StringSniffer::capitalize($type);
 			$snifferClass = self::BASE_NAMESPACE . '\\' . $classType . 'Sniffer';
 
 			if (class_exists($snifferClass)) {

@@ -57,8 +57,9 @@
 		public function sniff($val, bool $isStrict = false): bool {
 			$accept = $this->sniffVal($val, $isStrict);
 
-			if ($this->throw && !$accept)
+			if ($this->throw && !$accept) {
 				throw new InvalidValueException(var_export($val, true) . ' does not confirm to type specifications');
+			}
 
 			return $accept;
 		}
@@ -69,8 +70,9 @@
 			$valid = true;
 
 			foreach ($types as $type) {
-				if (!is_string($type))
+				if (!is_string($type)) {
 					return false;
+				}
 
 				$type = static::TYPE_REMAPPINGS[$type] ?? $type;
 				$valid &= in_array($type, static::SUPPORTED_TYPES);

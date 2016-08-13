@@ -37,8 +37,9 @@
 
 					$mayDrop = $min == 0;
 
-					if (!is_array($element) || (is_array($type) && array_keys($element) == array_keys($type)))
+					if (!is_array($element) || (is_array($type) && array_keys($element) == array_keys($type))) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
+					}
 
 					$elemCount = count($element);
 					$conforms = $min <= $elemCount && $elemCount <= $max;
@@ -48,40 +49,46 @@
 						$conforms &= $subSniffer->sniff($subElement);
 					}
 
-					if (!$this->handle(!$conforms, 'Key ' . $key . ' of type ' . json_encode($type) . ' does not conform!'))
+					if (!$this->handle(!$conforms, 'Key ' . $key . ' of type ' . json_encode($type) . ' does not conform!')) {
 						return false;
+					}
 				} else if (is_array($type)) {
-					if (!$this->handle(!array_key_exists($key, $array), 'Missing key: ' . $key . ' of type ' . json_encode($type)))
+					if (!$this->handle(!array_key_exists($key, $array), 'Missing key: ' . $key . ' of type ' . json_encode($type))) {
 						return false;
+					}
 
-					if (!$this->handle(!is_array($element), $key . ' must be a complex array'))
+					if (!$this->handle(!is_array($element), $key . ' must be a complex array')) {
 						return false;
+					}
 
 					$conforms = $this->subSniffer($type)->sniff($element);
 
-					if (!$this->handle(!$conforms, 'Complex array ' . $key . ' does not conform!'))
+					if (!$this->handle(!$conforms, 'Complex array ' . $key . ' does not conform!')) {
 						return false;
+					}
 				} else {
-					//$type = preg_replace('/(.*)\?$/', '$1|null', $type);
 					$expectedTypes = explode('|', $type);
 
 					$conforms = false;
 
-					if (!$this->handle(!array_key_exists($key, $array) && !in_array('null', $expectedTypes), 'Missing key: ' . $key . ' of type ' . $type))
+					if (!$this->handle(!array_key_exists($key, $array) && !in_array('null', $expectedTypes), 'Missing key: ' . $key . ' of type ' . $type)) {
 						return false;
+					}
 
 					foreach ($expectedTypes as $t) {
 						$baseType = preg_replace('/(.*)\!$/', '$1', $t);
 						$isStrict = $t != $baseType;
 
-						if (!$this->handle(!SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid'))
+						if (!$this->handle(!SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid')) {
 							return false;
+						}
 
 						$conforms |= SplSniffer::forType($baseType)->sniff($element, $isStrict);
 					}
 
-					if (!$this->handle(!$conforms, $key . ' with value ' . var_export($element, true) . ' does not match type definition ' . $type))
+					if (!$this->handle(!$conforms, $key . ' with value ' . var_export($element, true) . ' does not match type definition ' . $type)) {
 						return false;
+					}
 				}
 			}
 

@@ -1,0 +1,34 @@
+{
+  "name": "adeptoas/sniffArray",
+  "type": "library",
+  "description": "A tool for checking array spec conformity",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Gregor Billing",
+      "email": "gb@adepto.as",
+      "homepage": "http://suushiemaniac.com"
+    }
+  ],
+  "version": "1.0.0",
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.0",
+    "squizlabs/php_codesniffer": "^2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Adepto\\SniffArray\\": "src"
+    }
+  },
+  "scripts": {
+    "test": [
+      "@phpunit",
+      "@phpcs"
+    ],
+    "phpunit": "php vendor/bin/phpunit",
+    "phpcs": "php vendor/bin/phpcs"
+  }
+}

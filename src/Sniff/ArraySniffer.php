@@ -28,10 +28,12 @@
 					$subSpec = [$baseKey => $type];
 					$subSniffer = $this->subSniffer($subSpec);
 
-					$conforms = StringSniffer::strEndsWith($key, '*') || count($element);
+					$mayDrop = StringSniffer::strEndsWith($key, '*');
 
 					if (!is_array($element) || (is_array($type) && array_keys($element) == array_keys($type)))
-						$element = [$element];
+						$element = $mayDrop && is_null($element) ? [] : [$element];
+
+					$conforms = $mayDrop || count($element);
 
 					foreach ($element as $subElement) {
 						$subElement = [$baseKey => $subElement];

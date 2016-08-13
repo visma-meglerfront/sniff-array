@@ -50,7 +50,7 @@
 
 		protected $throw;
 
-		public function __construct(bool $throw = false) {
+		protected function __construct(bool $throw = false) {
 			$this->throw = $throw;
 		}
 

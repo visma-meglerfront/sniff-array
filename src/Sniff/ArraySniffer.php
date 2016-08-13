@@ -21,19 +21,27 @@
 
 		public function sniff(array $array): bool {
 			foreach ($this->spec as $key => $type) {
-				$baseKey = preg_replace('/(.*)[\+\*]$/', '$1', $key); //Remove eventual * or +
+				$key = preg_replace('/(.*)\*$/', '$1{,}', $key);
+				$key = preg_replace('/(.*)\+$/', '$1{1,}', $key);
+				$key = preg_replace('/(.*)\?$/', '$1{,1}', $key);
+
+				$baseKey = preg_replace('/(.*){\d*,\d*}$/', '$1', $key);
 				$element = $array[$baseKey] ?? null;
 
 				if ($baseKey != $key) { //RegExp key used
+					$min = preg_replace('/.*{(\d*),\d*}$/', '$1', $key) ?: 0;
+					$max = preg_replace('/.*{\d*,(\d*)}$/', '$1', $key) ?: INF;
+
 					$subSpec = [$baseKey => $type];
 					$subSniffer = $this->subSniffer($subSpec);
 
-					$mayDrop = StringSniffer::strEndsWith($key, '*');
+					$mayDrop = $min == 0;
 
 					if (!is_array($element) || (is_array($type) && array_keys($element) == array_keys($type)))
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 
-					$conforms = $mayDrop || count($element);
+					$elemCount = count($element);
+					$conforms = $min <= $elemCount && $elemCount <= $max;
 
 					foreach ($element as $subElement) {
 						$subElement = [$baseKey => $subElement];
@@ -54,7 +62,7 @@
 					if (!$this->handle(!$conforms, 'Complex array ' . $key . ' does not conform!'))
 						return false;
 				} else {
-					$type = preg_replace('/(.*)\?$/', '$1|null', $type);
+					//$type = preg_replace('/(.*)\?$/', '$1|null', $type);
 					$expectedTypes = explode('|', $type);
 
 					$conforms = false;
@@ -64,7 +72,7 @@
 
 					foreach ($expectedTypes as $t) {
 						$baseType = preg_replace('/(.*)\!$/', '$1', $t);
-						$isStrict = strlen($t) != strlen($baseType);
+						$isStrict = $t != $baseType;
 
 						if (!$this->handle(!SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid'))
 							return false;

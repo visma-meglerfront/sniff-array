@@ -1,5 +1,5 @@
 {
-  "name": "adeptoas/sniffArray",
+  "name": "adeptoas/sniff-array",
   "type": "library",
   "description": "A tool for checking array spec conformity",
   "license": "proprietary",

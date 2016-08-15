@@ -1,7 +1,5 @@
 <?php
-	use Adepto\SniffArray\Sniff\{
-		BoolSniffer, SplSniffer
-	};
+	use Adepto\SniffArray\Sniff\SplSniffer;
 
 	class BoolSnifferTest extends PHPUnit_Framework_TestCase {
 		/** @var SplSniffer */

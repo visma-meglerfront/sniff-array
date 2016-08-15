@@ -8,7 +8,7 @@ Add this to `composer.json`:
 
 ```json
 "require": {
-	"adeptoas/sniffArray": "^1.0.0"
+	"adeptoas/sniff-array": "^1.0.0"
 }
 ```
 

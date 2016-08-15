@@ -7,13 +7,6 @@ This is a lightweight library to check if a given array conforms to a certain sp
 Add this to `composer.json`:
 
 ```json
-"repositories": [
-	{
-		"type": "vcs",
-		"url": "https://github.com/adeptoas/sniffarray"
-	}
-],
-
 "require": {
 	"adeptoas/sniffArray": "^1.0.0"
 }

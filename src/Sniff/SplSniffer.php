@@ -120,4 +120,13 @@
 			$type = static::TYPE_REMAPPINGS[$type] ?? $type;
 			return in_array($type, static::SUPPORTED_TYPES);
 		}
+
+		/**
+		 * Get a list of all known type definitions including all supported aliases
+		 *
+		 * @return array The unique list of type strings
+		 */
+		public static function getSupportedTypes(): array {
+			return array_unique(array_merge(static::SUPPORTED_TYPES, array_keys(static::TYPE_REMAPPINGS)));
+		}
 	}

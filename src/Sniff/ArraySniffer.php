@@ -11,6 +11,8 @@
 	 * @version 1.1
 	 */
 	class ArraySniffer {
+		const ROOT_LEVEL = '__root';
+
 		private $spec;
 		private $throw;
 
@@ -42,6 +44,10 @@
 		 * @return bool If the $array matches or not
 		 */
 		public function sniff(array $array): bool {
+			if (MixedArraySniffer::isSequential($array)) {
+				$array = [static::ROOT_LEVEL	=>	$array];
+			}
+
 			foreach ($this->spec as $key => $type) {
 				$key = preg_replace('/(.*)\*$/', '$1{,}', $key);
 				$key = preg_replace('/(.*)\+$/', '$1{1,}', $key);

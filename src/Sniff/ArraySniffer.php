@@ -45,7 +45,7 @@
 		 */
 		public function sniff(array $array): bool {
 			if (MixedArraySniffer::isSequential($array)) {
-				$array = [static::ROOT_LEVEL	=>	$array];
+				$array = [static::ROOT_LEVEL	=>	array_values($array)];
 			}
 
 			foreach ($this->spec as $key => $type) {

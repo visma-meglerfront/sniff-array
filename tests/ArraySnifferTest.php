@@ -123,6 +123,36 @@
 			]));
 		}
 
+		public function testRootLevelSpecConformity() {
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'__root+'	=>	[
+					'foo'	=>	'number',
+					'bar'	=>	'int'
+				]
+			], [
+				[
+					'foo'	=>	INF,
+					'bar'	=>	1
+				], [
+					'foo'	=>	-INF,
+					'bar'	=>	-1
+				], [
+					'foo'	=>	NAN,
+					'bar'	=>	0
+				]
+			]));
+
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'__root'	=>	[
+					'key'		=>	'number',
+					'otherKey'	=>	'string|bool'
+				]
+			], [
+				'key'		=>	123.456,
+				'otherKey'	=>	true
+			]));
+		}
+
 		public function testRegExpSpecConformity() {
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',

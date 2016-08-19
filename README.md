@@ -194,6 +194,33 @@ as well as
 ]
 ```
 
+Arrays that are sequential at root level can be checked for specification match by using the key `__root`. This can be especially useful for bulk mode handling a given specification
+
+```php
+[
+    '__root+'   =>  [
+        'foo'       =>  'bool',
+        'bar?'      =>  'int'
+    ]
+]
+```
+
+matches
+
+```php
+[
+    [
+        'foo'   =>  'true',
+        'bar'   =>  0
+    ], [
+        'foo'   =>  'true'
+    ], [
+        'foo'   =>  'false',
+        'bar'   =>  42
+    ]
+]
+```
+
 ## Examples
 
 Examples will be added to the `examples/` directory once I come up with meaningful examples that don't involve confidential data from my dayjob.

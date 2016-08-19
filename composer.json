@@ -1,7 +1,7 @@
 {
   "name": "adeptoas/sniff-array",
   "type": "library",
-  "description": "A tool for checking array spec conformity",
+  "description": "A tool for checking array specification conformity",
   "license": "proprietary",
   "authors": [
     {

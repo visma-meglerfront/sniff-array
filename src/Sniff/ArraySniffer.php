@@ -7,7 +7,7 @@
 	 * Class ArraySniffer
 	 * Can check an array for conformity to a certain specification
 	 *
-	 * @author suushie_maniac
+	 * @author  suushie_maniac
 	 * @version 1.1
 	 */
 	class ArraySniffer {
@@ -40,7 +40,9 @@
 		 * Sniff for the conformity of $array to this ArraySniffer instance's specification
 		 *
 		 * @param array $array The array to check conformity for
+		 *
 		 * @throws InvalidArrayFormatException If the $array doesn't match and $throw of this instance is true
+		 *
 		 * @return bool If the $array matches or not
 		 */
 		public function sniff(array $array): bool {
@@ -145,7 +147,9 @@
 		 * @param array $spec The specification to check for
 		 * @param array $array The array to check
 		 * @param bool $throw Whether an exception should be raised on failure
+		 *
 		 * @throws InvalidArrayFormatException If the $array doesn't match and $throw is set to true
+		 *
 		 * @return bool If the $array matches or not
 		 */
 		public static function arrayConformsTo(array $spec, array $array, bool $throw = false): bool {

@@ -9,7 +9,7 @@
 	 * Class SplSniffer
 	 * An abstract base class to sniff / check basic SPL types / primitives in PHP
 	 *
-	 * @author suushie_maniac
+	 * @author  suushie_maniac
 	 * @version 1.0
 	 */
 	abstract class SplSniffer {
@@ -47,7 +47,9 @@
 		 *
 		 * @param string $type The desired $type to check for
 		 * @param bool $throw Whether an exception should be raised on failure
+		 *
 		 * @throws ClassNotFoundException If no subclass exists for the given $type
+		 *
 		 * @return SplSniffer The sniffer sniffing/checking elements of $type
 		 */
 		public static function forType(string $type, bool $throw = false): SplSniffer {
@@ -74,7 +76,9 @@
 		 *
 		 * @param mixed $val The value to check for
 		 * @param bool $isStrict Whether the strict mode is enabled for matching
+		 *
 		 * @return bool If $val matches or not
+		 *
 		 * @throws InvalidValueException If $val does not match and $throw of this instance is true
 		 */
 		public function sniff($val, bool $isStrict = false): bool {
@@ -93,6 +97,7 @@
 		 * Check if all types in $types have valid SplSniffers
 		 *
 		 * @param array $types A sequential list of types to check for
+		 *
 		 * @return bool True iff all types match
 		 */
 		public static function validateTypes(array $types): bool {
@@ -114,6 +119,7 @@
 		 * Check if $type has a valid SplSniffer
 		 *
 		 * @param string $type The type to check for
+		 *
 		 * @return bool True iff an SplSniffer exists
 		 */
 		public static function isValidType(string $type): bool {

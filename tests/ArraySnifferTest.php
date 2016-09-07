@@ -141,6 +141,15 @@
 					'bar'	=>	0
 				]
 			]));
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'__root+'	=>	[
+					'key'		=>	'number',
+					'otherKey'	=>	'string|bool'
+				]
+			], [
+				'key'		=>	123.456,
+				'otherKey'	=>	true
+			]));
 
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'__root'	=>	[

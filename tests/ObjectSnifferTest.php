@@ -9,7 +9,7 @@
 
 		protected function setUp() {
 			$this->sniffer = SplSniffer::forType('object');
-			$this->instanceSniffer = SplSniffer::forType('class::IntSniffer|MixedSniffer');
+			$this->instanceSniffer = SplSniffer::forType('class::IntSniffer::MixedSniffer');
 		}
 
 		public function testStaticCreation() {

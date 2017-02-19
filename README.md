@@ -63,6 +63,7 @@ The basic type identifications delivered with this library are
 * bool
 * mixed
 * array
+* object
 
 Some common aliases are also implemented:
 * boolean => bool
@@ -72,11 +73,12 @@ Some common aliases are also implemented:
 * empty => null
 * class => object
 
-Strict specifications are denoted by the type followed by an exclamation sign (!) and narrow down the possible accepted values. In particular:
+Strict specifications are denoted by the type followed by an exclamation sign `!` and narrow down the possible accepted values. In particular:
 * string! doesn't accept the empty string `''`
 * int! doesn't accept `0`
 * number! doesn't accept `0` or `NAN`
 * array! doesn't accept empty arrays `[]`
+* object! doesn't accept stdClass objects with 0 fields `new stdClass()`
 * mixed! doesn't accept arbitrary arrays, only pure primitives
 
 `array` as primitive specification simply denotes any arbitrary array of whatever form, while an explicitly specified nested array specification demands exact matches
@@ -132,12 +134,12 @@ but (obviously) not
 ```
 
 Specification keys can be appended by some RegExp-like features to expand matching functionality, namely:
-* `+` for one or more matches
-* `*` for zero or more matches
-* `?` for an optional match
 * `{a,b}` for minimum a and maximum b matches
   * `{,b}` for zero to b matches
   * `{a,}` for a to INF matches
+* `+` for one or more matches (equal to `{1,}`)
+* `*` for zero or more matches (equal to `{0,}`)
+* `?` for an optional match (equal to `{0,1}`)
   
 Keys that allow for 0 matches by use of this RegExp typeset can either be explicitly set to `null` or implicitly dropped.
 
@@ -263,6 +265,8 @@ matches
 Some Sniffers, particularly `StringSniffer` and `ObjectSniffer`, support specifying additional sniff data
 via the usage of `::`
 
+This colon "operator" supports multiple repeated arguments. The effect of an argument is specified by the respective Sniffer class.
+
 For `StringSniffer`, the colon data can be used to specify a matching regular expression (RegExp).
 The conformity to this RegExp will be checked in addition to the usual check by using `preg_match` as specified in the PHP standard library
 
@@ -323,12 +327,11 @@ nor
 ]
 ```
 
-Please also note that multiple classes can be specified using the same bar `|` operator as standard specifications.
-ATTENTION: Clashes with standard specification mode are in testing currently. Use with caution.
+Please also note that multiple classes can be specified using the same colon `::` operator in a repeated fashion
 
 ```php
 [
-    'object'   =>  'class::MyClass|MyOtherClass'
+    'object'   =>  'class::MyClass::MyOtherClass'
 ]
 ```
 

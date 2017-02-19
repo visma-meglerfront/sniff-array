@@ -27,6 +27,10 @@
 		}
 
 		public static function wrapRegExp(string $rawExpression): string {
+			if (mb_substr($rawExpression, 0, 1) == mb_substr($rawExpression, -1, 1)) {
+				return $rawExpression;
+			}
+
 			$wrappers = str_split('/#%?$');
 
 			foreach ($wrappers as $wrapper) {

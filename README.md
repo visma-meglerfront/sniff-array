@@ -70,6 +70,7 @@ Some common aliases are also implemented:
 * numeric => number
 * any => mixed
 * empty => null
+* class => object
 
 Strict specifications are denoted by the type followed by an exclamation sign (!) and narrow down the possible accepted values. In particular:
 * string! doesn't accept the empty string `''`
@@ -221,6 +222,71 @@ matches
 ]
 ```
 
+## Colon notation
+
+Some Sniffers, particularly `StringSniffer` and `ObjectSniffer`, support specifying additional sniff data
+via the usage of `::`
+
+For `StringSniffer`, the colon data can be used to specify a matching regular expression (RegExp).
+The conformity to this RegExp will be checked in addition to the usual check by using `preg_match` as specified in the PHP standard library
+
+```php
+[
+    'foo*'   =>  'string::^[A-Z][a-z]*$'
+]
+```
+
+matches
+
+```php
+[
+    'foo'   =>  ['Hello', 'World']
+]
+```
+
+but not
+
+```php
+[
+    'foo'   =>  ['eHlo', 'World', '!']
+]
+```
+
+Please note that the RegExp will automatically be wrapped in convenient PCRE bounds, (i.e. //) if not wrapped already
+
+For `ObjectSniffer`, the colon data can be used to specify instance class names. They can be fully namespaced,
+but standard "short name" checks will also be performed.
+
+```php
+[
+    'object'   =>  'class::MyClass'
+]
+```
+
+matches
+
+```php
+[
+    'object'   =>  new MyClass()
+]
+```
+
+but not
+
+```php
+[
+    'object'   =>  new MyOtherClass()
+]
+```
+
+nor
+
+```php
+[
+    'object'   =>  new stdClass()
+]
+```
+
 ## Examples
 
-Examples will be added to the `examples/` directory once I come up with meaningful examples that don't involve confidential data from my dayjob.
+Examples will be added to the `Examples/` directory once I come up with meaningful examples that don't involve confidential data from my dayjob.

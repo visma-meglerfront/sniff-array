@@ -195,6 +195,42 @@ as well as
 ]
 ```
 
+Multiple types can be joined by using the bar `|` sign. This does not infer with any of the other type rules.
+
+```php
+[
+    'key'       =>  'string!|bool',
+    'otherKey'  =>  'int|array'
+]
+```
+
+is a valid specification for
+
+```php
+[
+    'key'       =>  'element',
+    'otherKey'  =>  123
+]
+```
+
+as well as
+
+```php
+[
+    'key'       =>  true,
+    'otherKey'  =>  123
+]
+```
+
+and
+
+```php
+[
+    'key'       =>  false,
+    'otherKey'  =>  ['foo', 'bar']
+]
+```
+
 Arrays that are sequential at root level can be checked for specification match by using the key `__root`. This can be especially useful for bulk mode handling a given specification
 
 ```php
@@ -271,7 +307,7 @@ matches
 ]
 ```
 
-but not
+but neither
 
 ```php
 [
@@ -284,6 +320,31 @@ nor
 ```php
 [
     'object'   =>  new stdClass()
+]
+```
+
+Please also note that multiple classes can be specified using the same bar `|` operator as standard specifications.
+ATTENTION: Clashes with standard specification mode are in testing currently. Use with caution.
+
+```php
+[
+    'object'   =>  'class::MyClass|MyOtherClass'
+]
+```
+
+accounts for both
+
+```php
+[
+    'object'   =>  new MyClass()
+]
+```
+
+and
+
+```php
+[
+    'object'   =>  new MyOtherClass()
 ]
 ```
 

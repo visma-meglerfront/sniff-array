@@ -97,7 +97,7 @@
 						return false;
 					}
 				} else {
-					$expectedTypes = explode('|', $type);
+					$expectedTypes = preg_split('/\|(?=' . implode('|', SplSniffer::getSupportedTypes()) . ')/', $type);
 
 					$conforms = false;
 

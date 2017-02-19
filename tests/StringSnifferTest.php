@@ -5,10 +5,13 @@
 
 	class StringSnifferTest extends PHPUnit_Framework_TestCase {
 		/** @var SplSniffer */
+		private $regexpSniffer;
+		/** @var SplSniffer */
 		private $sniffer;
 
 		protected function setUp() {
 			$this->sniffer = SplSniffer::forType('string');
+			$this->regexpSniffer = SplSniffer::forType('string::^[A-Z][a-z]*$');
 		}
 
 		public function testStaticCreation() {
@@ -72,5 +75,14 @@
 			$this->assertTrue($this->sniffer->sniff('string', true));
 
 			$this->assertFalse($this->sniffer->sniff('', true));
+		}
+
+		public function testSniffColon() {
+			$this->assertTrue($this->regexpSniffer->sniff('Word'));
+			$this->assertTrue($this->regexpSniffer->sniff('Test'));
+			$this->assertTrue($this->regexpSniffer->sniff('Regex'));
+
+			$this->assertFalse($this->regexpSniffer->sniff('RegExp'));
+			$this->assertFalse($this->regexpSniffer->sniff('CamelCase'));
 		}
 	}

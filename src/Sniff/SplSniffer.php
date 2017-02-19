@@ -22,6 +22,7 @@
 		const TYPE_NULL = 'null';
 		const TYPE_MIXED = 'mixed';
 		const TYPE_MIXED_ARRAY = 'mixedArray';
+		const TYPE_OBJECT = 'object';
 
 		const SUPPORTED_TYPES = [
 			self::TYPE_BOOL,
@@ -30,7 +31,8 @@
 			self::TYPE_NUMBER,
 			self::TYPE_NULL,
 			self::TYPE_MIXED,
-			self::TYPE_MIXED_ARRAY
+			self::TYPE_MIXED_ARRAY,
+			self::TYPE_OBJECT
 		];
 
 		const TYPE_REMAPPINGS = [
@@ -39,8 +41,11 @@
 			'numeric'	=>	self::TYPE_NUMBER,
 			'integer'	=>	self::TYPE_INT,
 			'any'		=>	self::TYPE_MIXED,
-			'array'		=>	self::TYPE_MIXED_ARRAY
+			'array'		=>	self::TYPE_MIXED_ARRAY,
+			'class'		=>	self::TYPE_OBJECT
 		];
+
+		const COLON_SPECIFIER = '::';
 
 		/**
 		 * Factory method to obtain a subclass of SplSniffer that sniffs/checks for $type
@@ -53,22 +58,27 @@
 		 * @return SplSniffer The sniffer sniffing/checking elements of $type
 		 */
 		public static function forType(string $type, bool $throw = false): SplSniffer {
+			$typeSpecs = explode(self::COLON_SPECIFIER, $type);
+			$type = array_shift($typeSpecs);
+
 			$type = static::TYPE_REMAPPINGS[$type] ?? $type;
 
 			$classType = StringSniffer::capitalize($type);
 			$snifferClass = self::BASE_NAMESPACE . '\\' . $classType . 'Sniffer';
 
 			if (class_exists($snifferClass)) {
-				return new $snifferClass($throw);
+				return new $snifferClass($throw, $typeSpecs);
 			} else {
 				throw new ClassNotFoundException($snifferClass . ' for type ' . $type . ' not found');
 			}
 		}
 
 		protected $throw;
+		protected $specData;
 
-		protected function __construct(bool $throw = false) {
+		protected function __construct(bool $throw = false, array $specData = []) {
 			$this->throw = $throw;
+			$this->specData = $specData;
 		}
 
 		/**
@@ -108,8 +118,7 @@
 					return false;
 				}
 
-				$type = static::TYPE_REMAPPINGS[$type] ?? $type;
-				$valid &= in_array($type, static::SUPPORTED_TYPES);
+				$valid &= self::isValidType($type);
 			}
 
 			return $valid;
@@ -123,6 +132,7 @@
 		 * @return bool True iff an SplSniffer exists
 		 */
 		public static function isValidType(string $type): bool {
+			$type = explode(static::COLON_SPECIFIER, $type)[0];
 			$type = static::TYPE_REMAPPINGS[$type] ?? $type;
 			return in_array($type, static::SUPPORTED_TYPES);
 		}

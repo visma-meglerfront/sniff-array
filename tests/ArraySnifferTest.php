@@ -141,6 +141,14 @@
 					'bar'	=>	0
 				]
 			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'__root+'	=>	'string::.*'
+			], [
+				'hello',
+				'world',
+				'!'
+			], true));
+
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'__root+'	=>	[
 					'key'		=>	'number',
@@ -150,7 +158,6 @@
 				'key'		=>	123.456,
 				'otherKey'	=>	true
 			]));
-
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'__root'	=>	[
 					'key'		=>	'number',

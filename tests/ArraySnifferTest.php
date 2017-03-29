@@ -1,5 +1,4 @@
 <?php
-	use Adepto\SniffArray\Exception\InvalidArrayFormatException;
 	use Adepto\SniffArray\Sniff\ArraySniffer;
 
 	class ArraySnifferTest extends PHPUnit_Framework_TestCase {

@@ -13,6 +13,35 @@
 				'otherKey'		=>	INF,
 				'yetAnotherKey'	=>	123
 			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'type'			=>	'string',
+				'parameters?'	=>	'array',
+				'endpoints?'	=>	'array'
+			], [
+				'type'		=>	'GET',
+				'endpoints'	=>	[
+					'type'	=>	'GET'
+				]
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'type'			=>	'string',
+				'parameters?'	=>	'array',
+				'endpoints+'	=>	[
+					'type'			=>	'string',
+					'parameters'	=>	'array'
+				]
+			], [
+				'type'		=>	'group',
+				'endpoints'	=>	[
+					[
+						'type'			=>	'GET',
+						'parameters'	=>	[]
+					], [
+						'type'			=>	'POST',
+						'parameters'	=>	[]
+					]
+				]
+			]));
 		}
 
 		public function testSpecConformityNegative() {

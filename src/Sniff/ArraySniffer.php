@@ -59,15 +59,17 @@
 				$element = $array[$baseKey] ?? null;
 
 				if ($baseKey != $key) { //RegExp key used
-					$min = preg_replace('/.*{(\d*),\d*}$/', '$1', $key) ?: 0;
-					$max = preg_replace('/.*{\d*,(\d*)}$/', '$1', $key) ?: INF;
+					$min = (int) preg_replace('/.*{(\d*),\d*}$/', '$1', $key) ?: 0;
+					$max = (int) preg_replace('/.*{\d*,(\d*)}$/', '$1', $key) ?: INF;
 
 					$subSpec = [$baseKey => $type];
 					$subSniffer = $this->subSniffer($subSpec);
 
 					$mayDrop = $min == 0;
 
-					if (!is_array($element) || (is_array($type) && array_keys($element) == array_keys($type))) {
+					if (!is_array($element)
+						|| (is_array($type) && array_keys($type) == array_keys($element))
+						|| (is_string($type) && SplSniffer::forType($type) instanceof MixedArraySniffer)) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 					}
 

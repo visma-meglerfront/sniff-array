@@ -98,10 +98,26 @@
 				throw new InvalidValueException(var_export($val, true) . ' does not confirm to type specifications');
 			}
 
-			return $accept;
+			$colonAccept = count($this->specData) <= 0;
+
+			if ($accept) {
+				foreach ($this->specData as $colonData) {
+					$colonAccept |= $this->sniffColonVal($val, $colonData);
+				}
+			}
+
+			if ($this->throw && !$colonAccept) {
+				throw new InvalidValueException(var_export($val, true) . ' does not confirm to type specification colon data!');
+			}
+
+			return $accept && $colonAccept;
 		}
 
 		protected abstract function sniffVal($val, bool $isStrict = false): bool;
+
+		protected function sniffColonVal($val, string $colonData): bool {
+			return true;
+		}
 
 		/**
 		 * Check if all types in $types have valid SplSniffers

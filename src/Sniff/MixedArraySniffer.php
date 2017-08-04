@@ -16,35 +16,22 @@
 		}
 
 		protected function sniffVal($val, bool $isStrict = false): bool {
-			$sniffMatch = is_array($val) && (!$isStrict || count($val));
+			return is_array($val) && (!$isStrict || count($val));
+		}
 
-			$specCount = count($this->specData);
-			$typeMatch = !$specCount;
+		protected function sniffColonVal($val, string $colonData): bool {
+			$desiredType = strtolower($this->specData[0]);
+			$type = self::ARRAY_TYPE_REMAPPINGS[$desiredType] ?? $desiredType;
 
-			if ($specCount > 0) {
-				if ($specCount > 1) {
-					if ($this->throw) {
-						throw new \InvalidArgumentException('Conflicting colon specifiers for MixedArraySniffer set');
-					}
-
-					return false;
+			if (!in_array($type, array_values(self::ARRAY_TYPE_REMAPPINGS))) {
+				if ($this->throw) {
+					throw new \InvalidArgumentException('Invalid array type for MixedArraySniffer: ' . $type);
 				}
 
-				$desiredType = strtolower($this->specData[0]);
-				$type = self::ARRAY_TYPE_REMAPPINGS[$desiredType] ?? $desiredType;
-
-				if (!in_array($type, array_values(self::ARRAY_TYPE_REMAPPINGS))) {
-					if ($this->throw) {
-						throw new \InvalidArgumentException('Invalid array type for MixedArraySniffer: ' . $type);
-					}
-
-					return false;
-				}
-
-				$check = 'is' . ucfirst(strtolower($type));
-				$typeMatch = is_array($val) && self::$check($val);
+				return false;
 			}
 
-			return $sniffMatch && $typeMatch;
+			$check = 'is' . ucfirst(strtolower($type));
+			return self::$check($val);
 		}
 	}

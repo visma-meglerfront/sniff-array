@@ -55,6 +55,8 @@
 				$key = preg_replace('/(.*)\+$/', '$1{1,}', $key);
 				$key = preg_replace('/(.*)\?$/', '$1{,1}', $key);
 
+				$key = preg_replace('/(.*){(\d+)}$/', '$1{$2,$2}', $key);
+
 				$baseKey = preg_replace('/(.*){\d*,\d*}$/', '$1', $key);
 				$element = $array[$baseKey] ?? null;
 

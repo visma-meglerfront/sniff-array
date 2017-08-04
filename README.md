@@ -262,7 +262,7 @@ matches
 
 ## Colon notation
 
-Some Sniffers, particularly `StringSniffer` and `ObjectSniffer`, support specifying additional sniff data
+Some Sniffers, particularly `StringSniffer`, `ObjectSniffer` and `MixedArraySniffer`, support specifying additional sniff data
 via the usage of `::`
 
 This colon "operator" supports multiple repeated arguments. The effect of an argument is specified by the respective Sniffer class.
@@ -350,6 +350,63 @@ and
     'object'   =>  new MyOtherClass()
 ]
 ```
+
+For `MixedArraySniffer`, the colon data can be used to specify whether an associative or a sequential array is desired.
+
+```php
+[
+    'values'   =>  'array::sequential'
+]
+```
+
+matches
+
+```php
+[
+    'values'    =>  [1, 2, 'one', 'two', true, false]
+]
+```
+
+but not
+
+```php
+[
+    'values'    =>  [
+        'key'   =>  'value'
+    ]
+]
+```
+
+whereas the specification
+
+```php
+[
+    'dict'   =>  'array::associative'
+]
+```
+
+matches
+
+```php
+[
+    'dict'  =>  [
+        'one'   =>  1,
+        'two'   =>  2
+    ]
+]
+```
+
+but not the `values` example from above. Common aliases `seq` for `sequential` and `assoc` for `associative` are installed for convenience,
+so that
+
+```php
+[
+    'members'   =>  'array::seq',
+    'relations' =>  'array::assoc'
+]
+```
+
+is a valid specification. More than one specified array type will be discarded and sniffed as `false` or throw an exception, respectively.
 
 ## Examples
 

@@ -7,8 +7,15 @@
 		/** @var SplSniffer */
 		protected $sniffer;
 
+		/** @var SplSniffer */
+		protected $seqSniffer;
+		/** @var SplSniffer */
+		protected $assocSniffer;
+
 		protected function setUp() {
 			$this->sniffer = SplSniffer::forType('array');
+			$this->seqSniffer = SplSniffer::forType('array::seq');
+			$this->assocSniffer = SplSniffer::forType('array::assoc');
 		}
 
 		public function testStaticCreation() {
@@ -16,6 +23,18 @@
 			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
 
 			$sniffer = SplSniffer::forType('mixedArray');
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
+
+			$sniffer = SplSniffer::forType('array::sequential');
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
+
+			$sniffer = SplSniffer::forType('array::seq');
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
+
+			$sniffer = SplSniffer::forType('array::associative');
+			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
+
+			$sniffer = SplSniffer::forType('array::assoc');
 			$this->assertEquals('Adepto\\SniffArray\\Sniff\\MixedArraySniffer', get_class($sniffer));
 		}
 
@@ -87,5 +106,29 @@
 			], true));
 
 			$this->assertFalse($this->sniffer->sniff([], true));
+		}
+
+		public function testSniffColon() {
+			$this->assertTrue($this->seqSniffer->sniff(['a', 'sequential', 'array']));
+			$this->assertTrue($this->seqSniffer->sniff([]));
+			$this->assertTrue($this->seqSniffer->sniff(['string', true, 123], true));
+
+			$this->assertTrue($this->assocSniffer->sniff([
+				'key'	=>	'value',
+				'flag'	=>	true,
+				'count'	=>	42
+			]));
+			$this->assertTrue($this->assocSniffer->sniff([]));
+
+			$this->assertFalse($this->assocSniffer->sniff(['a', 'sequential', 'array']));
+			$this->assertFalse($this->assocSniffer->sniff([], true));
+			$this->assertFalse($this->assocSniffer->sniff(['string', true, 123], true));
+
+			$this->assertFalse($this->seqSniffer->sniff([
+				'key'	=>	'value',
+				'flag'	=>	true,
+				'count'	=>	42
+			]));
+			$this->assertFalse($this->seqSniffer->sniff([], true));
 		}
 	}

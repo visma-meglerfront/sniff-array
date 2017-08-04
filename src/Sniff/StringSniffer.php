@@ -28,7 +28,7 @@
 		}
 
 		public static function wrapRegExp(string $rawExpression): string {
-			if (mb_substr($rawExpression, 0, 1) == mb_substr($rawExpression, -1, 1)) {
+			if (mb_substr($rawExpression, 0, 1) == mb_substr($rawExpression, -1, 1) && strlen($rawExpression) > 2) {
 				return $rawExpression;
 			}
 

@@ -10,7 +10,7 @@
       "homepage": "http://suushiemaniac.com"
     }
   ],
-  "version": "1.6.4",
+  "version": "1.6.5",
   "require": {
     "php": ">=7.0.0"
   },

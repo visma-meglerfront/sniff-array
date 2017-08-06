@@ -43,6 +43,39 @@
 			]));
 		}
 
+		public function testSpecConformityAssociative() {
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'int',
+				'string!',
+				'any'
+			], [
+				3,
+				'hello',
+				['world']
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'__root'	=>	[
+					'int',
+					'string!',
+					'any'
+				]
+			], [
+				3,
+				'hello',
+				['world']
+			]));
+
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'int',
+				'string!',
+				'any'
+			], [
+				3,
+				'',
+				['y', 'u', 'no', 'accept', 'dis', '?']
+			]));
+		}
+
 		public function testSpecConformityNegative() {
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key'			=>	'string',

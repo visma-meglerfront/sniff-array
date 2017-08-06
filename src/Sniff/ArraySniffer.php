@@ -46,7 +46,7 @@
 		 * @return bool If the $array matches or not
 		 */
 		public function sniff(array $array): bool {
-			if (MixedArraySniffer::isSequential($array)) {
+			if (MixedArraySniffer::isSequential($array) && array_keys($array) != array_keys($this->spec)) {
 				$array = [static::ROOT_LEVEL	=>	array_values($array)];
 			}
 

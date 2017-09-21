@@ -46,7 +46,7 @@
 		 * @return bool If the $array matches or not
 		 */
 		public function sniff(array $array): bool {
-			if (MixedArraySniffer::isSequential($array) && !array_intersect(array_keys($array), array_keys($this->spec))) {
+			if (MixedArraySniffer::isSequential($array) && array_diff_key($this->spec, $array)) {
 				$array = [static::ROOT_LEVEL	=>	array_values($array)];
 			}
 
@@ -70,7 +70,7 @@
 					$mayDrop = $min == 0;
 
 					if (!is_array($element)
-						|| (is_array($type) && array_keys($type) == array_keys($element))
+						|| (is_array($type) && !array_diff_key($type, $element))
 						|| (is_string($type) && strpos($type, '|') === false && SplSniffer::forType($type) instanceof MixedArraySniffer) && !MixedArraySniffer::isSequential($element)) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 					}

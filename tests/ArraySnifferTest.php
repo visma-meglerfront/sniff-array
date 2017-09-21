@@ -25,6 +25,22 @@
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'type'			=>	'string',
 				'parameters?'	=>	'array',
+				'endpoints+'	=>	'array'
+			], [
+				'type'		=>	'group',
+				'endpoints'	=>	[
+					[
+						'type'			=>	'GET',
+						'parameters'	=>	[]
+					], [
+						'type'			=>	'POST',
+						'parameters'	=>	[]
+					]
+				]
+			]));
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'type'			=>	'string',
+				'parameters?'	=>	'array',
 				'endpoints+'	=>	[
 					'type'			=>	'string',
 					'parameters'	=>	'array'

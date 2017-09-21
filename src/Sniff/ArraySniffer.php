@@ -71,7 +71,7 @@
 
 					if (!is_array($element)
 						|| (is_array($type) && array_keys($type) == array_keys($element))
-						|| (is_string($type) && strpos($type, '|') === false && SplSniffer::forType($type) instanceof MixedArraySniffer)) {
+						|| (is_string($type) && strpos($type, '|') === false && SplSniffer::forType($type) instanceof MixedArraySniffer) && !MixedArraySniffer::isSequential($element)) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 					}
 

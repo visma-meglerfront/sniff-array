@@ -662,4 +662,18 @@
 				'nanKey'	=>	1.414
 			]));
 		}
+		
+		public function testOptionalInArray() {
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'stringKey' =>  'string',
+				'arrayKey?'  =>  [
+					'intKey?'    =>  'int'
+				]
+			], [
+				'stringKey' =>  'hi',
+				'arrayKey'  =>  [
+					'intKey'    =>  5
+				]
+			]), 'Array is optional and the first parameter as well.');
+		}
 	}

@@ -51,13 +51,7 @@
 			}
 
 			foreach ($this->spec as $key => $type) {
-				$key = preg_replace('/(.*)\*$/', '$1{,}', $key);
-				$key = preg_replace('/(.*)\+$/', '$1{1,}', $key);
-				$key = preg_replace('/(.*)\?$/', '$1{,1}', $key);
-
-				$key = preg_replace('/(.*){(\d+)}$/', '$1{$2,$2}', $key);
-
-				$baseKey = preg_replace('/(.*){\d*,\d*}$/', '$1', $key);
+				list($key, $baseKey) = self::normalizeKeys($key);
 				$element = $array[$baseKey] ?? null;
 
 				if ($baseKey != $key) { //RegExp key used
@@ -68,9 +62,20 @@
 					$subSniffer = $this->subSniffer($subSpec);
 
 					$mayDrop = $min == 0;
+					
+					$cleanType = null;
+					
+					if (is_array($type)) {
+						$cleanType = [];
+					
+						foreach ($type as $typeKey => $typeVal) {
+							list(, $typeBaseKey) = self::normalizeKeys($typeKey);
+							$cleanType[$typeBaseKey] = $typeVal;
+						}
+					}
 
 					if (!is_array($element)
-						|| (is_array($type) && !array_diff_key($type, $element))
+						|| (is_array($cleanType) && !array_diff_key($cleanType, $element))
 						|| (is_string($type) && strpos($type, '|') === false && SplSniffer::forType($type) instanceof MixedArraySniffer) && !MixedArraySniffer::isSequential($element)) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 					}
@@ -158,5 +163,17 @@
 		 */
 		public static function arrayConformsTo(array $spec, array $array, bool $throw = false): bool {
 			return (new ArraySniffer($spec, $throw))->sniff($array);
+		}
+		
+		public static function normalizeKeys($key) {
+			$key = preg_replace('/(.*)\*$/', '$1{,}', $key);
+			$key = preg_replace('/(.*)\+$/', '$1{1,}', $key);
+			$key = preg_replace('/(.*)\?$/', '$1{,1}', $key);
+			
+			$key = preg_replace('/(.*){(\d+)}$/', '$1{$2,$2}', $key);
+			
+			$baseKey = preg_replace('/(.*){\d*,\d*}$/', '$1', $key);
+			
+			return [$key, $baseKey];
 		}
 	}

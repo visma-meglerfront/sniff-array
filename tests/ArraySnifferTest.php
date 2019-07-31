@@ -265,6 +265,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested*'	=>	[
@@ -275,6 +276,7 @@
 				'key'		=>	[123, 456, 789],
 				'nested'	=>	[]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested*'	=>	[
@@ -293,6 +295,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested*'	=>	[
@@ -311,6 +314,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested*'	=>	[
@@ -318,6 +322,7 @@
 					'second'	=>	'bool'
 				]
 			], []));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested*'	=>	[
@@ -327,6 +332,7 @@
 			], [
 				'key'	=>	null
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key+'		=>	'int',
 				'nested'	=>	[
@@ -340,6 +346,7 @@
 					'second'	=>	true
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key'		=>	'int',
 				'nested+'	=>	[
@@ -353,6 +360,7 @@
 					'second'	=>	true
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{1,3}'		=>	'int',
 				'nested*'	=>	[
@@ -371,6 +379,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{1,}'		=>	'int',
 				'nested*'	=>	[
@@ -389,6 +398,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{,3}'		=>	'int',
 				'nested*'	=>	[
@@ -407,6 +417,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{,}'		=>	'int',
 				'nested*'	=>	[
@@ -425,6 +436,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{2}'		=>	'int',
 				'nested*'	=>	[
@@ -443,6 +455,7 @@
 					]
 				]
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key{7}'		=>	'int',
 				'nested*'	=>	[
@@ -461,6 +474,101 @@
 					]
 				]
 			]));
+			
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested*'	=>	[
+					'first+'	=>	'string',
+					'second'	=>	'bool'
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	true
+					], [
+						'first'		=>	['hey', 'ho', ''],
+						'second'	=>	false
+					]
+				]
+			]));
+			
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested?'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	[
+							'super-nested'	=>	1.23
+						]
+					]
+				]
+			], true));
+			
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested?'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					'first'		=>	'yo',
+					'second'	=>	[
+						'super-nested'	=>	1.23
+					]
+				]
+			]));
+			
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested+'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	[
+							'super-nested'	=>	1.23
+						]
+					]
+				]
+			]));
+			
+			$this->assertTrue(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested+'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested?'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	[]
+					]
+				]
+			]));
 
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key+'		=>	'int',
@@ -475,6 +583,7 @@
 					'second'	=>	true
 				]
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key{1,3}'		=>	'int',
 				'nested*'	=>	[
@@ -493,6 +602,7 @@
 					]
 				]
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested{5,}'	=>	[
@@ -511,6 +621,7 @@
 					]
 				]
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested{,1}'	=>	[
@@ -529,6 +640,7 @@
 					]
 				]
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 				'nested{2}'	=>	[
@@ -542,15 +654,68 @@
 					'second'	=>	false
 				]
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 			], [
 				'key'		=>	[null],
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key*'		=>	'int',
 			], [
 				'key'		=>	[null, null, null],
+			]));
+			
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested+'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	[]
+					]
+				]
+			]));
+			
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested+'	=>	[
+					'first+'	=>	'string',
+					'second'	=>	'number'
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'second'	=>	3.141
+					]
+				]
+			]));
+			
+			$this->assertFalse(ArraySniffer::arrayConformsTo([
+				'key{7}'		=>	'int',
+				'nested+'	=>	[
+					'first*'	=>	'string',
+					'second'	=>	[
+						'super-nested'	=>	'number'
+					]
+				]
+			], [
+				'key'		=>	[123, 456, 789, 123, 456, 789, 123],
+				'nested'	=>	[
+					[
+						'first'		=>	'yo',
+						'second'	=>	[]
+					]
+				]
 			]));
 		}
 
@@ -562,6 +727,7 @@
 				'key'		=>	'yes',
 				'otherKey'	=>	null
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key'		=>	'string|bool',
 				'otherKey'	=>	'number|null'
@@ -569,31 +735,37 @@
 				'key'		=>	true,
 				'otherKey'	=>	0
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null'
 			], [
 				'reallyAnything'	=>	'someString'
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null'
 			], [
 				'reallyAnything'	=>	true
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null'
 			], [
 				'reallyAnything'	=>	-INF
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null'
 			], [
 				'reallyAnything'	=>	123456789
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null'
 			], [
 				'reallyAnything'	=>	null
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'reallyAnything'	=>	'string|bool|number|int|null',
 			], []));
@@ -615,6 +787,7 @@
 				'key'			=>	'value',
 				'explicitNull'	=>	null
 			]));
+			
 			$this->assertTrue(ArraySniffer::arrayConformsTo([
 				'key'			=>	'string',
 				'implicitNull?'	=>	'bool'
@@ -629,6 +802,7 @@
 				'key'			=>	'abc',
 				'notNullKey'	=>	null
 			]));
+			
 			$this->assertFalse(ArraySniffer::arrayConformsTo([
 				'key'			=>	'string',
 				'notNullKey'	=>	'number'

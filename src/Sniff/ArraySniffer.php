@@ -46,6 +46,7 @@
 		 * @return bool If the $array matches or not
 		 */
 		public function sniff(array $array): bool {
+			// wrap sequential arrays so that k/v iteration doesn't break
 			if (MixedArraySniffer::isSequential($array) && array_diff_key($this->spec, $array)) {
 				$array = [static::ROOT_LEVEL	=>	array_values($array)];
 			}
@@ -54,7 +55,7 @@
 				list($key, $baseKey) = self::normalizeKeys($key);
 				$element = $array[$baseKey] ?? null;
 
-				if ($baseKey != $key) { //RegExp key used
+				if ($baseKey != $key) { // quantifier key with {min,max} or optional*+? was used
 					$min = (int) preg_replace('/.*{(\d*),\d*}$/', '$1', $key) ?: 0;
 					$max = (int) preg_replace('/.*{\d*,(\d*)}$/', '$1', $key) ?: INF;
 
@@ -74,58 +75,65 @@
 						}
 					}
 
-					if (!is_array($element)
-						|| (is_array($cleanType) && !array_diff_key($cleanType, $element))
+					if (!is_array($element) // wrap lonely SPL entries
+						|| (is_array($type) && !MixedArraySniffer::isSequential($element)) // wrap sub-specified arrays that appear exactly once
 						|| (is_string($type) && strpos($type, '|') === false && SplSniffer::forType($type) instanceof MixedArraySniffer) && !MixedArraySniffer::isSequential($element)) {
 						$element = $mayDrop && is_null($element) ? [] : [$element];
 					}
 
 					$elemCount = count($element);
 					$conforms = $min <= $elemCount && $elemCount <= $max;
-
+					
+					if ($this->breakUnless($conforms, 'Key ' . $key . ' appears ' . $elemCount . ' times but is restricted to {' . $min . ',' . $max . '}!')) {
+						return false;
+					}
+					
 					foreach ($element as $subElement) {
 						$subElement = [$baseKey => $subElement];
 						$conforms &= $subSniffer->sniff($subElement);
 					}
 
-					if (!$this->handle(!$conforms, 'Key ' . $key . ' of type ' . json_encode($type) . ' does not conform!')) {
+					if ($this->breakUnless($conforms, 'Key ' . $key . ' of type ' . json_encode($type) . ' does not conform!')) {
 						return false;
 					}
 				} else if (is_array($type)) {
-					if (!$this->handle(!array_key_exists($key, $array), 'Missing key: ' . $key . ' of type ' . json_encode($type))) {
+					if ($this->breakUnless(array_key_exists($key, $array), 'Missing key: ' . $key . ' of type ' . json_encode($type))) {
 						return false;
 					}
 
-					if (!$this->handle(!is_array($element), $key . ' must be a complex array')) {
+					if ($this->breakUnless(is_array($element), $key . ' must be a complex array')) {
 						return false;
 					}
 
+					// call recursive sniffing method
 					$conforms = $this->subSniffer($type)->sniff($element);
 
-					if (!$this->handle(!$conforms, 'Complex array ' . $key . ' does not conform!')) {
+					if ($this->breakUnless($conforms, 'Complex array ' . $key . ' does not conform!')) {
 						return false;
 					}
 				} else {
+					// FIXME why no stupid split at |
 					$expectedTypes = preg_split('/\|(?=' . implode('|', SplSniffer::getSupportedTypes()) . ')/', $type);
 
 					$conforms = false;
 
-					if (!$this->handle(!array_key_exists($key, $array) && !in_array('null', $expectedTypes), 'Missing key: ' . $key . ' of type ' . $type)) {
+					if ($this->breakUnless(array_key_exists($key, $array) || in_array('null', $expectedTypes), 'Missing key: ' . $key . ' of type ' . $type)) {
 						return false;
 					}
 
 					foreach ($expectedTypes as $t) {
+						// separate exclamation mark
 						$baseType = preg_replace('/(.*)\!$/', '$1', $t);
 						$isStrict = $t != $baseType;
 
-						if (!$this->handle(!SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid')) {
+						if ($this->breakUnless(SplSniffer::isValidType($baseType), 'Type ' . $baseType . ' not valid')) {
 							return false;
 						}
 
 						$conforms |= SplSniffer::forType($baseType)->sniff($element, $isStrict);
 					}
 
-					if (!$this->handle(!$conforms, $key . ' with value ' . var_export($element, true) . ' does not match type definition ' . $type)) {
+					if ($this->breakUnless($conforms, $key . ' with value ' . var_export($element, true) . ' does not match type definition ' . $type)) {
 						return false;
 					}
 				}
@@ -138,15 +146,15 @@
 			return new self($spec, $this->throw);
 		}
 
-		private function handle(bool $condition, string $errMessage = ''): bool {
-			if ($condition) {
+		private function breakUnless(bool $condition, string $errMessage = ''): bool {
+			if (!$condition) {
 				if ($this->throw) {
 					throw new InvalidArrayFormatException($errMessage);
 				}
 
-				return false;
-			} else {
 				return true;
+			} else {
+				return false;
 			}
 		}
 
